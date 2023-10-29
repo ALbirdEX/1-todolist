@@ -26,7 +26,8 @@ export function Todolist(props: PropsType) {
         setTitle(event.currentTarget.value)
     }
     const onKeyDownHandler = (event: KeyboardEvent<HTMLInputElement>) => {
-        if (event.key === "Enter") {
+        console.log(event)
+        if (event.key === "Enter" && event.altKey) {
             addTask()
         }
     }
