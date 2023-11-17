@@ -13,7 +13,7 @@ function App() {
             {id: 4, title: "rest API", isDone: false},
             {id: 5, title: "graphQL", isDone: false},
         ]*/
-    let [tasks, setTasks] = useState([
+    const [tasks, setTasks] = useState([
             {id: v1(), title: "HTML & SCC", isDone: true},
             {id: v1(), title: "JS", isDone: true},
             {id: v1(), title: "ReactJS", isDone: false},
@@ -29,11 +29,19 @@ function App() {
 
     function addTask(title: string) {
         let task = {id: v1(), title, isDone: false}
-        let newTasks = [task, ...tasks]
+        const newTasks = [task, ...tasks]
         setTasks(newTasks)
     }
 
-    let [filter, setFilter] = useState<FilterType>("all")
+    function changeTaskStatus(id: string, isDone: boolean) {
+        let task = tasks.find(t => t.id === id)
+        if (task) {
+            task.isDone = isDone
+            setTasks([...tasks]) // «собери оставшиеся параметры и положи их в массив»
+        }
+    }
+
+    const [filter, setFilter] = useState<FilterType>("all")
 
     let tasksForTodolist = tasks
 
@@ -57,6 +65,8 @@ function App() {
                       removeTask={removeTask}
                       changeFilter={changeFilter}
                       addTask={addTask}
+                      changeTaskStatus={changeTaskStatus}
+                      filter={filter}
             />
         </div>
     );

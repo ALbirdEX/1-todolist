@@ -6,3 +6,29 @@
 .App > div {
   margin-right: 50px;
 }
+
+.error {
+  border: red 2px solid;
+  border-radius: 15px;
+}
+
+.error-message {
+  color: red;
+}
+
+.active-filter {
+  background-color: darkgoldenrod;
+}
+
+.passive-filter {
+  background-color: darkgray;
+}
+
+.is-done {
+  opacity: 0.5;
+}
+
+.border-radius button, input {
+  margin-inline: 5px;
+  border-radius: 15px;
+}
