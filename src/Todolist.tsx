@@ -1,21 +1,18 @@
-import React, {FocusEvent, ChangeEvent, KeyboardEvent, useState} from "react";
-import {FilterType} from "./App";
+import React, {ChangeEvent, FocusEvent, KeyboardEvent, useState} from "react";
+import {FilterType, TaskType} from "./App";
 import {useAutoAnimate} from "@formkit/auto-animate/react";
 
-type TasksType = {
-    id: string,
-    title: string,
-    isDone: boolean,
-}
 
 type PropsType = {
     title: string,
-    tasks: Array<TasksType>  // TasksType[]
-    removeTask: (taskID: string) => void
-    changeFilter: (value: FilterType) => void
-    addTask: (title: string) => void
-    changeTaskStatus: (id: string, isDone: boolean) => void
+    id: string,
+    tasks: Array<TaskType>  // TasksType[]
+    removeTask: (todolistId: string, taskId: string) => void
+    changeFilter: (todolistId: string, value: FilterType) => void
+    addTask: (todolistId: string, title: string) => void
+    changeTaskStatus: (todolistId: string, id: string, isDone: boolean) => void
     filter: FilterType
+    removeTodolist: (id: string) => void
 }
 
 export function Todolist(props: PropsType) {
@@ -27,7 +24,7 @@ export function Todolist(props: PropsType) {
 
     const addTask = () => {
         if (title.trim() !== "") {
-            props.addTask(title.trim())
+            props.addTask(props.id,title.trim())
             setTitle("")
         } else {
             setError("______Title is required______")
@@ -37,7 +34,7 @@ export function Todolist(props: PropsType) {
         setTitle(event.currentTarget.value)
     }
     const onKeyDownHandler = (event: KeyboardEvent<HTMLInputElement>) => {
-        //setError("") //убиваем ошибку при начале ввода
+        //setError(null) //убиваем ошибку при начале ввода
         if (event.key === "Enter" && event.altKey) {
             addTask()
         }
@@ -48,40 +45,46 @@ export function Todolist(props: PropsType) {
         }
     }
     const onAllClickHandler = () => {
-        props.changeFilter("all")
+        props.changeFilter(props.id, "all")
     }
     const onActiveClickHandler = () => {
-        props.changeFilter("active")
+        props.changeFilter(props.id, "active")
     }
     const onCompletedClickHandler = () => {
-        props.changeFilter("completed")
+        props.changeFilter(props.id, "completed")
+    }
+
+    const removeTodolistHandler = () => {
+      props.removeTodolist(props.id)
     }
 
     return (
         <div className={"border-radius"}>
-            <h3>{props.title}</h3>
+            <h3>{props.title}
+                <button onClick={removeTodolistHandler}>✖️</button>
+            </h3>
             <div>
                 <input placeholder={"Введите название задачи"}
                        value={title}
                        onChange={onChangeHandler}
                        onKeyDown={onKeyDownHandler}
                        onFocus={onFocusHandler}
-                       className={error ? "error": ""}
+                       className={error ? "error" : ""}
                 />
                 <button
                     onClick={addTask}>
                     ➕
                 </button>
-                {error && <div className={error ? "error-message" : ""}>{error}</div>}
+                {error && <div className={"error-message"}>{error}</div>}
             </div>
             <ol ref={animationRef}>
                 {props.tasks.map((task) => {
                     const onClickHandler = () => {
-                        props.removeTask(task.id)
+                        props.removeTask(props.id, task.id)
                     }
                     const onChangeStatus = (event: ChangeEvent<HTMLInputElement>) => {
                         let newIsDone = event.currentTarget.checked
-                        props.changeTaskStatus(task.id, newIsDone)
+                        props.changeTaskStatus(props.id,task.id, newIsDone)
                     }
                     return (
                         <li key={task.id} className={task.isDone ? "is-done" : ""}>
