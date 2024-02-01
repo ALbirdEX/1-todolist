@@ -9,15 +9,17 @@
 
 .error {
   border: red 2px solid;
-  border-radius: 15px;
+  border-radius: 7px;
 }
 
 .error-message {
+  margin-top: 5px;
+  text-align: center;
   color: red;
 }
 
 .active-filter {
-  background-color: palegreen;
+  background-color: #d3e50d;
 }
 
 .passive-filter {
@@ -28,7 +30,9 @@
   opacity: 0.5;
 }
 
-.border-radius button, input {
+.border-radius button, input, h3 {
+  text-align: center;
   margin-inline: 5px;
-  border-radius: 15px;
+  margin-top: 5px;
+  border-radius: 7px;
 }

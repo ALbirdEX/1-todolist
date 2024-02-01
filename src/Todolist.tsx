@@ -1,7 +1,8 @@
-import React, {ChangeEvent, FocusEvent, KeyboardEvent, useState} from "react";
+import React, {ChangeEvent} from "react";
 import {FilterType, TaskType} from "./App";
 import {useAutoAnimate} from "@formkit/auto-animate/react";
-
+import {AddItemForm} from "./AddItemForm";
+import {EditableSpan} from "./EditableSpan";
 
 type PropsType = {
     title: string,
@@ -13,36 +14,15 @@ type PropsType = {
     changeTaskStatus: (todolistId: string, id: string, isDone: boolean) => void
     filter: FilterType
     removeTodolist: (id: string) => void
+    changeTaskTitle: (todolistId: string, id: string, newTitle: string) => void
 }
 
 export function Todolist(props: PropsType) {
 
     const [animationRef] = useAutoAnimate<HTMLDListElement>()
 
-    const [title, setTitle] = useState("")
-    const [error, setError] = useState<string | null>(null)
-
-    const addTask = () => {
-        if (title.trim() !== "") {
-            props.addTask(props.id,title.trim())
-            setTitle("")
-        } else {
-            setError("______Title is required______")
-        }
-    }
-    const onChangeHandler = (event: ChangeEvent<HTMLInputElement>) => {
-        setTitle(event.currentTarget.value)
-    }
-    const onKeyDownHandler = (event: KeyboardEvent<HTMLInputElement>) => {
-        //setError(null) //убиваем ошибку при начале ввода
-        if (event.key === "Enter" && event.altKey) {
-            addTask()
-        }
-    }
-    const onFocusHandler = (event: FocusEvent<HTMLInputElement>) => {
-        if (!event.defaultPrevented) {
-            setError(null)
-        }
+    const addTask = (title: string) => {
+        props.addTask(props.id, title)
     }
     const onAllClickHandler = () => {
         props.changeFilter(props.id, "all")
@@ -53,9 +33,8 @@ export function Todolist(props: PropsType) {
     const onCompletedClickHandler = () => {
         props.changeFilter(props.id, "completed")
     }
-
     const removeTodolistHandler = () => {
-      props.removeTodolist(props.id)
+        props.removeTodolist(props.id)
     }
 
     return (
@@ -63,20 +42,7 @@ export function Todolist(props: PropsType) {
             <h3>{props.title}
                 <button onClick={removeTodolistHandler}>✖️</button>
             </h3>
-            <div>
-                <input placeholder={"Введите название задачи"}
-                       value={title}
-                       onChange={onChangeHandler}
-                       onKeyDown={onKeyDownHandler}
-                       onFocus={onFocusHandler}
-                       className={error ? "error" : ""}
-                />
-                <button
-                    onClick={addTask}>
-                    ➕
-                </button>
-                {error && <div className={"error-message"}>{error}</div>}
-            </div>
+            <AddItemForm addItem={addTask}/>
             <ol ref={animationRef}>
                 {props.tasks.map((task) => {
                     const onClickHandler = () => {
@@ -84,14 +50,18 @@ export function Todolist(props: PropsType) {
                     }
                     const onChangeStatus = (event: ChangeEvent<HTMLInputElement>) => {
                         let newIsDone = event.currentTarget.checked
-                        props.changeTaskStatus(props.id,task.id, newIsDone)
+                        props.changeTaskStatus(props.id, task.id, newIsDone)
+                    }
+                    const changeTaskTitle = (newTitle: string) => {
+                        props.changeTaskTitle(props.id, task.id, newTitle)
                     }
                     return (
                         <li key={task.id} className={task.isDone ? "is-done" : ""}>
                             <input type="checkbox"
                                    checked={task.isDone}
                                    onChange={onChangeStatus}/>
-                            <span>{task.title}</span>
+                            <EditableSpan value={task.title}
+                                          onChange={changeTaskTitle}/>
                             <button
                                 onClick={onClickHandler}>
                                 ✖️
@@ -117,3 +87,5 @@ export function Todolist(props: PropsType) {
         </div>
     );
 }
+
+
