@@ -15,6 +15,7 @@ type PropsType = {
     filter: FilterType
     removeTodolist: (id: string) => void
     changeTaskTitle: (todolistId: string, id: string, newTitle: string) => void
+    changeTodolistTitle: (todolistId: string, newTitle: string) => void
 }
 
 export function Todolist(props: PropsType) {
@@ -36,10 +37,15 @@ export function Todolist(props: PropsType) {
     const removeTodolistHandler = () => {
         props.removeTodolist(props.id)
     }
+    const changeTodolistTitle = (newTitle: string) => {
+        props.changeTodolistTitle(props.id, newTitle)
+    }
 
     return (
         <div className={"border-radius"}>
-            <h3>{props.title}
+            <h3>
+                <EditableSpan value={props.title}
+                              onChange={changeTodolistTitle}/>
                 <button onClick={removeTodolistHandler}>✖️</button>
             </h3>
             <AddItemForm addItem={addTask}/>

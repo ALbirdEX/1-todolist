@@ -32,7 +32,6 @@ export function AddItemForm(props: AddItemFormPropsType) {
             setError(null)
         }
     }
-
     return (
         <div>
             <input placeholder={"Введите название задачи"}
