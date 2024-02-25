@@ -1,4 +1,9 @@
-import React, {ChangeEvent, FocusEvent, KeyboardEvent, useState} from "react";
+import Button from "@mui/material/Button";
+import React, {ChangeEvent, KeyboardEvent, useState} from "react";
+import TextField from '@mui/material/TextField';
+import IconButton from "@mui/material/IconButton";
+import AddBox from "@mui/icons-material/AddBox";
+
 
 export type AddItemFormPropsType = {
     addItem: (title: string) => void
@@ -6,15 +11,15 @@ export type AddItemFormPropsType = {
 
 export function AddItemForm(props: AddItemFormPropsType) {
 
-    const [title, setTitle] = useState("")
+    const [title, setTitle] = useState('')
     const [error, setError] = useState<string | null>(null)
 
     const addItem = () => {
-        if (title.trim() !== "") {
+        if (title.trim() !== '') {
             props.addItem(title.trim())
-            setTitle("")
+            setTitle('')
         } else {
-            setError("Title is required")
+            setError('Title is required')
         }
     }
     const onChangeHandler = (event: ChangeEvent<HTMLInputElement>) => {
@@ -22,27 +27,32 @@ export function AddItemForm(props: AddItemFormPropsType) {
     }
     const onKeyDownHandler = (event: KeyboardEvent<HTMLInputElement>) => {
         //setError(null) //убиваем ошибку при начале ввода
-        if (event.key === "Enter" && event.altKey) {
+        if (event.key === 'Enter' && event.altKey) {
             addItem()
         }
     }
-    const onFocusHandler = (event: FocusEvent<HTMLInputElement>) => {
-        //убиваем ошибку при фокусе
-        if (!event.defaultPrevented) {
+    const onBlurHandler = () => {//убиывем ошибку
+        if (error) {
             setError(null)
         }
     }
+
     return (
         <div>
-            <input placeholder={"Введите название задачи"}
-                   value={title}
-                   onChange={onChangeHandler}
-                   onKeyDown={onKeyDownHandler}
-                   onFocus={onFocusHandler}
-                   className={error ? "error" : ""}
+            <TextField variant='outlined'
+                       value={title}
+                       onChange={onChangeHandler}
+                       onKeyDown={onKeyDownHandler}
+                       error={!!error}
+                       label='Write the titl'
+                       helperText={error}
             />
-            <button onClick={addItem}>➕</button>
-            {error && <div className={"error-message"}>{error}</div>}
+            <IconButton
+                color='primary'
+                onClick={addItem}
+                onBlur={onBlurHandler}>
+                <AddBox/>
+            </IconButton>
         </div>
     )
 }
