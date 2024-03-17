@@ -13,12 +13,12 @@ import Container from "@mui/material/Container";
 import Grid from "@mui/material/Unstable_Grid2";
 import Paper from "@mui/material/Paper";
 
-export type FilterType = 'all' | 'active' | 'completed'
+export type FilterValuesType = 'all' | 'active' | 'completed'
 
-type TodolistType = {
+export type TodolistType = {
     id: string
     title: string,
-    filter: FilterType
+    filter: FilterValuesType
 }
 export type TaskType = {
     id: string
@@ -31,26 +31,26 @@ export type TasksStateType = {
 
 function App() {
 
-    let todolistID1 = v1()
-    let todolistID2 = v1()
+    let todolistId1 = v1()
+    let todolistId2 = v1()
 
     const [todolists, setTodolists] = useState<TodolistType[]>(
         [
-            {id: todolistID1, title: 'What to learn', filter: 'all'},
-            {id: todolistID2, title: 'What to buy', filter: 'completed'},
+            {id: todolistId1, title: 'What to learn', filter: 'all'},
+            {id: todolistId2, title: 'What to buy', filter: 'completed'},
         ]
     )
 
     const [tasks, setTasks] = useState<TasksStateType>(
         {
-            [todolistID1]: [
+            [todolistId1]: [
                 {id: v1(), title: 'HTML & SCC', isDone: true},
                 {id: v1(), title: 'JS', isDone: true},
                 {id: v1(), title: 'ReactJS', isDone: false},
                 {id: v1(), title: 'rest API', isDone: false},
                 {id: v1(), title: 'graphQL', isDone: false},
             ],
-            [todolistID2]: [
+            [todolistId2]: [
                 {id: v1(), title: 'RestAPI', isDone: false},
                 {id: v1(), title: 'RTK', isDone: false},
             ]
@@ -79,7 +79,7 @@ function App() {
         }
     }
 
-    function changeFilter(todolistId: string, value: FilterType) {
+    function changeFilter(todolistId: string, value: FilterValuesType) {
         let todolist = todolists.find(tl => tl.id === todolistId)
         if (todolist) {
             todolist.filter = value
@@ -160,7 +160,7 @@ function App() {
                                 break
                         }
                         return <Grid>
-                            <Paper style={{padding: '10px'}}
+                            <Paper style={{padding: '1  0px'}}
                                    elevation={24}>
                                 <Todolist key={todolist.id}
                                           title={todolist.title}

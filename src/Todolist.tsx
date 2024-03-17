@@ -1,5 +1,5 @@
 import React, {ChangeEvent} from "react";
-import {FilterType, TaskType} from "./App";
+import {FilterValuesType, TaskType} from "./App";
 import {useAutoAnimate} from "@formkit/auto-animate/react";
 import {AddItemForm} from "./AddItemForm";
 import {EditableSpan} from "./EditableSpan";
@@ -15,10 +15,10 @@ type PropsType = {
     id: string,
     tasks: Array<TaskType>  // TasksType[]
     removeTask: (todolistId: string, taskId: string) => void
-    changeFilter: (todolistId: string, value: FilterType) => void
+    changeFilter: (todolistId: string, value: FilterValuesType) => void
     addTask: (todolistId: string, title: string) => void
     changeTaskStatus: (todolistId: string, id: string, isDone: boolean) => void
-    filter: FilterType
+    filter: FilterValuesType
     removeTodolist: (id: string) => void
     changeTaskTitle: (todolistId: string, id: string, newTitle: string) => void
     changeTodolistTitle: (todolistId: string, newTitle: string) => void
