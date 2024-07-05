@@ -27,9 +27,7 @@
   background-color: darkgray;
 }
 
-.is-done {
-  opacity: 0.5;
-}
+
 
 .border-radius button, input, h3 {
   text-align: center;
@@ -37,3 +35,6 @@
   margin-top: 5px;
   border-radius: 7px;
 }*/
+.is-done {
+    opacity: 0.5;
+}

@@ -1,4 +1,3 @@
-import Button from "@mui/material/Button";
 import React, {ChangeEvent, KeyboardEvent, useState} from "react";
 import TextField from '@mui/material/TextField';
 import IconButton from "@mui/material/IconButton";
@@ -31,7 +30,8 @@ export function AddItemForm(props: AddItemFormPropsType) {
             addItem()
         }
     }
-    const onBlurHandler = () => {//убиывем ошибку
+    //убиывем ошибку
+    const onBlurHandler = () => {
         if (error) {
             setError(null)
         }

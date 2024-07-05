@@ -2,6 +2,14 @@ import {TasksStateType} from "../App";
 import {v1} from "uuid";
 import {AddTodolistActionType, RemoveTodolistActionType} from "./todolists-reducer";
 
+//ReturnType<Type> - извлекает тип возвращаемого значения функции Type
+//Оператор typeof возвращает строку, указывающую тип операнда
+export type RemoveTaskActionType = ReturnType<typeof removeTaskAC>
+export type AddTaskActionType = ReturnType<typeof addTaskAC>
+export type ChangeTaskStatusActionType = ReturnType<typeof changeTaskStatusAC>
+export type ChangeTaskTitleActionType = ReturnType<typeof changeTaskTitleAC>
+
+/* //типы экшиеов для креатеров
 export type RemoveTaskActionType = {
     type: 'REMOVE-TASK'
     todolistId: string
@@ -24,6 +32,7 @@ export type ChangeTaskTitleActionType = {
     taskId: string
     title: string
 }
+*/
 
 
 type ActionsType =
@@ -81,6 +90,30 @@ export const tasksReducer = (state: TasksStateType, action: ActionsType): TasksS
             throw new Error('I don\'t understand this type')
     }
 }
+
+//as const уточняет тип этой переменной до ее точного значения или комбинации литеральных типов
+// Используется для создания неизменяемых значений и гарантирования того,
+// что TypeScript будет рассматривать значения как конкретные литералы, а не расширять типы.
+export const removeTaskAC = (taskId: string, todolistId: string) => ({type: 'REMOVE-TASK', todolistId, taskId}) as const
+export const addTaskAC = (title: string, todolistId: string) => ({
+    type: 'ADD-TASK',
+    todolistId,
+    title
+}) as const
+export const changeTaskStatusAC = (taskId: string, isDone: boolean, todolistId: string) => ({
+    type: 'CHANGE-TASK-STATUS',
+    todolistId,
+    taskId,
+    isDone
+}) as const
+export const changeTaskTitleAC = (taskId: string, newTitle: string, todolistId: string) => ({
+    type: 'CHANGE-TASK-TITLE',
+    todolistId,
+    taskId,
+    title: newTitle
+}) as const
+
+/*
 export const removeTaskAC = (taskId: string, todolistId: string): RemoveTaskActionType => {
     return {type: 'REMOVE-TASK', todolistId, taskId}
 }
@@ -92,4 +125,4 @@ export const changeTaskStatusAC = (taskId: string, isDone: boolean, todolistId: 
 }
 export const changeTaskTitleAC = (taskId: string, newTitle: string, todolistId: string): ChangeTaskTitleActionType => {
     return {type: 'CHANGE-TASK-TITLE', todolistId, taskId, title: newTitle}
-}
+}*/

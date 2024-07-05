@@ -1,6 +1,5 @@
 import React, {ChangeEvent} from "react";
 import {FilterValuesType, TaskType} from "./App";
-import {useAutoAnimate} from "@formkit/auto-animate/react";
 import {AddItemForm} from "./AddItemForm";
 import {EditableSpan} from "./EditableSpan";
 import IconButton from "@mui/material/IconButton"
@@ -9,6 +8,7 @@ import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import Button from "@mui/material/Button";
 import ButtonGroup from "@mui/material/ButtonGroup";
 import CheckBox from "@mui/material/Checkbox";
+import {useAutoAnimate} from "@formkit/auto-animate/react";
 
 type PropsType = {
     title: string,
@@ -24,33 +24,38 @@ type PropsType = {
     changeTodolistTitle: (todolistId: string, newTitle: string) => void
 }
 
-export function Todolist(props: PropsType) {
+export const Todolist = (props: PropsType) => {
+    // сокращаем код используя деструктурирующее присваивание, избавляемся от props.
+    const {title,id,tasks, filter} = props
 
     const [animationRef] = useAutoAnimate<HTMLDListElement>()
 
     const addTask = (title: string) => {
-        props.addTask(props.id, title)
+        props.addTask(id, title)
     }
-    const onAllClickHandler = () => {
-        props.changeFilter(props.id, 'all')
-    }
-    const onActiveClickHandler = () => {
-        props.changeFilter(props.id, 'active')
-    }
-    const onCompletedClickHandler = () => {
-        props.changeFilter(props.id, 'completed')
+    /*   const onAllClickHandler = () => {
+           props.changeFilter(props.id, 'all')
+       }
+       const onActiveClickHandler = () => {
+           props.changeFilter(props.id, 'active')
+       }
+       const onCompletedClickHandler = () => {
+           props.changeFilter(props.id, 'completed')
+       }*/
+    const changeFilterTasksHandler = (filter: FilterValuesType) => {
+        props.changeFilter(id, filter)
     }
     const removeTodolistHandler = () => {
-        props.removeTodolist(props.id)
+        props.removeTodolist(id)
     }
     const changeTodolistTitle = (newTitle: string) => {
-        props.changeTodolistTitle(props.id, newTitle)
+        props.changeTodolistTitle(id, newTitle)
     }
 
     return (
         <div>
             <h3>
-                <EditableSpan value={props.title}
+                <EditableSpan value={title}
                               onChange={changeTodolistTitle}/>
                 <IconButton
                     onClick={removeTodolistHandler}>
@@ -58,43 +63,47 @@ export function Todolist(props: PropsType) {
                 </IconButton>
             </h3>
             <AddItemForm addItem={addTask}/>
-            <ol ref={animationRef}>
-                {props.tasks.map((task) => {
-                    const onClickHandler = () => {
-                        props.removeTask(props.id, task.id)
-                    }
-                    const onChangeStatus = (event: ChangeEvent<HTMLInputElement>) => {
-                        let newIsDone = event.currentTarget.checked
-                        props.changeTaskStatus(props.id, task.id, newIsDone)
-                    }
-                    const changeTaskTitle = (newTitle: string) => {
-                        props.changeTaskTitle(props.id, task.id, newTitle)
-                    }
-                    return (
-                        <li key={task.id} className={task.isDone ? 'is-done' : ''}>
-                            <CheckBox color='primary'
-                                      checked={task.isDone}
-                                      onChange={onChangeStatus}/>
-                            <EditableSpan value={task.title}
-                                          onChange={changeTaskTitle}/>
-                            <IconButton
-                                onClick={onClickHandler}>
-                                <DeleteForeverIcon color='error'/>
-                            </IconButton>
-                        </li>
-                    )
-                })}
-            </ol>
+            {tasks.length === 0
+                ? <p><h3>No tasks</h3></p>
+                : <ol ref={animationRef}>
+                    {tasks.map((task) => {
+                        const onClickHandler = () => {
+                            props.removeTask(id, task.id)
+                        }
+                        const onChangeStatus = (event: ChangeEvent<HTMLInputElement>) => {
+                            let newIsDone = event.currentTarget.checked
+                            props.changeTaskStatus(id, task.id, newIsDone)
+                        }
+                        const changeTaskTitle = (newTitle: string) => {
+                            props.changeTaskTitle(id, task.id, newTitle)
+                        }
+                        return (
+                            <li key={task.id} className={task.isDone ? 'is-done' : ''}>
+                                <CheckBox color='primary'
+                                          checked={task.isDone}
+                                          onChange={onChangeStatus}/>
+                                <EditableSpan value={task.title}
+                                              onChange={changeTaskTitle}/>
+                                <IconButton
+                                    onClick={onClickHandler}>
+                                    <DeleteForeverIcon color='error'/>
+                                </IconButton>
+                            </li>
+                        )
+                    })}
+                </ol>
+            }
+
             <div>
                 <ButtonGroup variant="contained" aria-label="Basic button group">
-                    <Button onClick={onAllClickHandler}
-                        color={props.filter === 'all' ? 'error' : 'primary'}>
+                    <Button onClick={() => changeFilterTasksHandler("all")}
+                            color={filter === 'all' ? 'error' : 'primary'}>
                         All</Button>
-                    <Button onClick={onActiveClickHandler}
-                        color={props.filter === 'active' ? 'error' : 'primary'}>
+                    <Button onClick={() => changeFilterTasksHandler("active")}
+                            color={filter === 'active' ? 'error' : 'primary'}>
                         Active</Button>
-                    <Button onClick={onCompletedClickHandler}
-                        color={props.filter === 'completed' ? 'error' : 'primary'}>
+                    <Button onClick={() => changeFilterTasksHandler("completed")}
+                            color={filter === 'completed' ? 'error' : 'primary'}>
                         Completed</Button>
                 </ButtonGroup>
 

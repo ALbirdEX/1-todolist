@@ -41,56 +41,68 @@ function App() {
         ]
     )
 
-    const [tasks, setTasks] = useState<TasksStateType>(
-        {
-            [todolistId1]: [
-                {id: v1(), title: 'HTML & SCC', isDone: true},
-                {id: v1(), title: 'JS', isDone: true},
-                {id: v1(), title: 'ReactJS', isDone: false},
-                {id: v1(), title: 'rest API', isDone: false},
-                {id: v1(), title: 'graphQL', isDone: false},
-            ],
-            [todolistId2]: [
-                {id: v1(), title: 'RestAPI', isDone: false},
-                {id: v1(), title: 'RTK', isDone: false},
-            ]
-        }
-    )
+    const [tasks, setTasks] = useState<TasksStateType>({
+        [todolistId1]: [
+            {id: v1(), title: 'HTML & SCC', isDone: true},
+            {id: v1(), title: 'JS', isDone: true},
+            {id: v1(), title: 'ReactJS', isDone: false},
+            {id: v1(), title: 'rest API', isDone: false},
+            {id: v1(), title: 'graphQL', isDone: false},
+        ],
+        [todolistId2]: [
+            {id: v1(), title: 'RestAPI', isDone: false},
+            {id: v1(), title: 'RTK', isDone: false},
+        ]
+    })
 
+    /* function removeTask(todolistId: string, id: string) {
+         let todolistTasks = tasks[todolistId]
+         tasks[todolistId] = todolistTasks.filter(task => task.id !== id)
+         setTasks({...tasks})
+     }*/
     function removeTask(todolistId: string, id: string) {
-        let todolistTasks = tasks[todolistId]
-        tasks[todolistId] = todolistTasks.filter(task => task.id !== id)
-        setTasks({...tasks})
+        setTasks({...tasks, [todolistId]: tasks[todolistId].filter(task => task.id !== id)})
     }
 
+    /*  function addTask(todolistId: string, title: string) {
+          let task = {id: v1(), title, isDone: false}
+          let todolistTasks = tasks[todolistId]
+          tasks[todolistId] = [task, ...todolistTasks]
+          setTasks({...tasks})
+      }*/
     function addTask(todolistId: string, title: string) {
-        let task = {id: v1(), title, isDone: false}
-        let todolistTasks = tasks[todolistId]
-        tasks[todolistId] = [task, ...todolistTasks]
-        setTasks({...tasks})
+        const newTask = {id: v1(), title, isDone: false}
+        setTasks({...tasks, [todolistId]: [newTask, ...tasks[todolistId]]})
     }
 
+    /*
+        function changeTaskStatus(todolistId: string, id: string, isDone: boolean) {
+            let todolistTasks = tasks[todolistId]
+            let task = todolistTasks.find(t => t.id === id)
+            if (task) {
+                task.isDone = isDone
+                setTasks({...tasks}) // «собери оставшиеся параметры и положи их в массив»
+            }
+        }*/
     function changeTaskStatus(todolistId: string, id: string, isDone: boolean) {
-        let todolistTasks = tasks[todolistId]
-        let task = todolistTasks.find(t => t.id === id)
-        if (task) {
-            task.isDone = isDone
-            setTasks({...tasks}) // «собери оставшиеся параметры и положи их в массив»
-        }
+        setTasks({...tasks, [todolistId]: tasks[todolistId].map(t => t.id === id ? {...t, isDone} : t)})
     }
 
-    function changeFilter(todolistId: string, value: FilterValuesType) {
+    /*function changeFilter(todolistId: string, value: FilterValuesType) {
         let todolist = todolists.find(tl => tl.id === todolistId)
         if (todolist) {
             todolist.filter = value
             setTodolists([...todolists])
         }
 
+    } */
+    function changeFilter(todolistId: string, value: FilterValuesType) {
+        setTodolists(todolists.map(td => td.id === todolistId ? {...td, filter: value} : td))
     }
 
-    function removeTodolist(id: string) {
-        setTodolists(todolists.filter(todolist => todolist.id !== id))
-        delete tasks[id]
+    function removeTodolist(todolistId: string) {
+        setTodolists(todolists.filter(todolist => todolist.id !== todolistId))
+        delete tasks[todolistId]
         setTasks({...tasks})
     }
 
