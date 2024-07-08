@@ -1,21 +1,21 @@
 import React, {ChangeEvent, KeyboardEvent, useState} from "react";
 import TextField from '@mui/material/TextField';
 import IconButton from "@mui/material/IconButton";
-import AddBox from "@mui/icons-material/AddBox";
+import AddBoxIcon from "@mui/icons-material/AddBox";
 
 
 export type AddItemFormPropsType = {
     addItem: (title: string) => void
 }
 
-export function AddItemForm(props: AddItemFormPropsType) {
+export function AddItemForm({addItem}: AddItemFormPropsType) {
 
     const [title, setTitle] = useState('')
     const [error, setError] = useState<string | null>(null)
 
-    const addItem = () => {
+    const addItemHandler = () => {
         if (title.trim() !== '') {
-            props.addItem(title.trim())
+            addItem(title.trim())
             setTitle('')
         } else {
             setError('Title is required')
@@ -27,7 +27,7 @@ export function AddItemForm(props: AddItemFormPropsType) {
     const onKeyDownHandler = (event: KeyboardEvent<HTMLInputElement>) => {
         //setError(null) //убиваем ошибку при начале ввода
         if (event.key === 'Enter' && event.altKey) {
-            addItem()
+            addItemHandler()
         }
     }
     //убиывем ошибку
@@ -46,12 +46,13 @@ export function AddItemForm(props: AddItemFormPropsType) {
                        error={!!error}
                        label='Write the titl'
                        helperText={error}
+                       size="small"
             />
             <IconButton
                 color='primary'
-                onClick={addItem}
+                onClick={addItemHandler}
                 onBlur={onBlurHandler}>
-                <AddBox/>
+                <AddBoxIcon/>
             </IconButton>
         </div>
     )

@@ -8,10 +8,10 @@ import Toolbar from "@mui/material/Toolbar";
 import MenuIcon from "@mui/icons-material/Menu";
 import IconButton from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
-import Button from "@mui/material/Button";
 import Container from "@mui/material/Container";
 import Grid from "@mui/material/Unstable_Grid2";
 import Paper from "@mui/material/Paper";
+import {MenuButton} from "./MenuButton";
 
 export type FilterValuesType = 'all' | 'active' | 'completed'
 
@@ -133,9 +133,9 @@ function App() {
     }
 
     return (
-        <div className='App'>
-            <AppBar position='static'>
-                <Toolbar>
+        <div>
+            <AppBar position='static' sx={{mb: '30px'}}>
+                <Toolbar sx={{display: 'flex', justifyContent: 'space-between'}}>
                     <IconButton color='inherit'
                                 edge='start'
                                 aria-label='menu'
@@ -147,15 +147,17 @@ function App() {
                     <Typography variant='h4'>
                         Todolist
                     </Typography>
-                    <Button color='inherit'
-                            onClick={() => {
-                                alert('LOGIN')
-                            }}>Login</Button>
+                    <div>
+                        <MenuButton onClick={() => {
+                            alert('LOGIN')
+                        }}>Login</MenuButton>
+                        <MenuButton>Logout</MenuButton>
+                        <MenuButton background={'#ab2a61'}>Faq</MenuButton>
+                    </div>
                 </Toolbar>
             </AppBar>
             <Container fixed>
-                <Grid container
-                      style={{padding: '20px'}}>
+                <Grid container sx={{mb: '30px'}}>
                     <AddItemForm addItem={addTodolist}/>
                 </Grid>
                 <Grid container spacing={4}>
@@ -172,7 +174,7 @@ function App() {
                                 break
                         }
                         return <Grid>
-                            <Paper style={{padding: '1  0px'}}
+                            <Paper sx={{padding: '0 20px 20px 20px'}}
                                    elevation={24}>
                                 <Todolist key={todolist.id}
                                           title={todolist.title}

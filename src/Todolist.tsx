@@ -9,6 +9,11 @@ import Button from "@mui/material/Button";
 import ButtonGroup from "@mui/material/ButtonGroup";
 import CheckBox from "@mui/material/Checkbox";
 import {useAutoAnimate} from "@formkit/auto-animate/react";
+import ListItem from '@mui/material/ListItem';
+import Box from '@mui/material/Box'
+import {List} from "@mui/material";
+import {filterButtonsContainerSx, getListItemSx} from "./Todolist.styles";
+
 
 type PropsType = {
     title: string,
@@ -26,7 +31,7 @@ type PropsType = {
 
 export const Todolist = (props: PropsType) => {
     // сокращаем код используя деструктурирующее присваивание, избавляемся от props.
-    const {title,id,tasks, filter} = props
+    const {title, id, tasks, filter} = props
 
     const [animationRef] = useAutoAnimate<HTMLDListElement>()
 
@@ -65,7 +70,7 @@ export const Todolist = (props: PropsType) => {
             <AddItemForm addItem={addTask}/>
             {tasks.length === 0
                 ? <p><h3>No tasks</h3></p>
-                : <ol ref={animationRef}>
+                : <List ref={animationRef}>
                     {tasks.map((task) => {
                         const onClickHandler = () => {
                             props.removeTask(id, task.id)
@@ -77,24 +82,27 @@ export const Todolist = (props: PropsType) => {
                         const changeTaskTitle = (newTitle: string) => {
                             props.changeTaskTitle(id, task.id, newTitle)
                         }
-                        return (
-                            <li key={task.id} className={task.isDone ? 'is-done' : ''}>
-                                <CheckBox color='primary'
-                                          checked={task.isDone}
-                                          onChange={onChangeStatus}/>
-                                <EditableSpan value={task.title}
-                                              onChange={changeTaskTitle}/>
+                        return (<ListItem
+                                key={task.id}
+                                sx={getListItemSx(task.isDone)}>
+                                <div>
+                                    <CheckBox color='primary'
+                                              checked={task.isDone}
+                                              onChange={onChangeStatus}/>
+                                    <EditableSpan value={task.title}
+                                                  onChange={changeTaskTitle}/>
+                                </div>
                                 <IconButton
                                     onClick={onClickHandler}>
                                     <DeleteForeverIcon color='error'/>
                                 </IconButton>
-                            </li>
+                            </ListItem>
                         )
                     })}
-                </ol>
+                </List>
             }
 
-            <div>
+            <Box sx={filterButtonsContainerSx}>{
                 <ButtonGroup variant="contained" aria-label="Basic button group">
                     <Button onClick={() => changeFilterTasksHandler("all")}
                             color={filter === 'all' ? 'error' : 'primary'}>
@@ -106,8 +114,7 @@ export const Todolist = (props: PropsType) => {
                             color={filter === 'completed' ? 'error' : 'primary'}>
                         Completed</Button>
                 </ButtonGroup>
-
-            </div>
+            }</Box>
         </div>
     );
 }
