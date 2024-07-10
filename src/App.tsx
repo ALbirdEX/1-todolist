@@ -12,6 +12,9 @@ import Container from "@mui/material/Container";
 import Grid from "@mui/material/Unstable_Grid2";
 import Paper from "@mui/material/Paper";
 import {MenuButton} from "./MenuButton";
+import {createTheme, ThemeProvider} from '@mui/material/styles'
+import {CssBaseline, Switch} from "@mui/material";
+
 
 export type FilterValuesType = 'all' | 'active' | 'completed'
 
@@ -28,6 +31,9 @@ export type TaskType = {
 export type TasksStateType = {
     [key: string]: TaskType[]
 }
+
+type ThemeMode = 'dark' | 'light'
+
 
 function App() {
 
@@ -55,12 +61,23 @@ function App() {
         ]
     })
 
+    const [themeMode, setThemeMode] = useState<ThemeMode>('light')
+
+    const theme = createTheme({
+        palette: {
+            mode: themeMode === 'light' ? 'light' : 'dark',
+            primary: {
+                main: '#32b0a2'
+            }
+        }
+    })
+
     /* function removeTask(todolistId: string, id: string) {
          let todolistTasks = tasks[todolistId]
          tasks[todolistId] = todolistTasks.filter(task => task.id !== id)
          setTasks({...tasks})
      }*/
-    function removeTask(todolistId: string, id: string) {
+    const removeTask = (todolistId: string, id: string) => {
         setTasks({...tasks, [todolistId]: tasks[todolistId].filter(task => task.id !== id)})
     }
 
@@ -70,7 +87,7 @@ function App() {
           tasks[todolistId] = [task, ...todolistTasks]
           setTasks({...tasks})
       }*/
-    function addTask(todolistId: string, title: string) {
+    const addTask = (todolistId: string, title: string) => {
         const newTask = {id: v1(), title, isDone: false}
         setTasks({...tasks, [todolistId]: [newTask, ...tasks[todolistId]]})
     }
@@ -84,7 +101,7 @@ function App() {
                 setTasks({...tasks}) // «собери оставшиеся параметры и положи их в массив»
             }
         }*/
-    function changeTaskStatus(todolistId: string, id: string, isDone: boolean) {
+    const changeTaskStatus = (todolistId: string, id: string, isDone: boolean) => {
         setTasks({...tasks, [todolistId]: tasks[todolistId].map(t => t.id === id ? {...t, isDone} : t)})
     }
 
@@ -96,17 +113,17 @@ function App() {
         }
 
     } */
-    function changeFilter(todolistId: string, value: FilterValuesType) {
+    const changeFilter = (todolistId: string, value: FilterValuesType) => {
         setTodolists(todolists.map(td => td.id === todolistId ? {...td, filter: value} : td))
     }
 
-    function removeTodolist(todolistId: string) {
+    const removeTodolist = (todolistId: string) => {
         setTodolists(todolists.filter(todolist => todolist.id !== todolistId))
         delete tasks[todolistId]
         setTasks({...tasks})
     }
 
-    function addTodolist(title: string) {
+    const addTodolist = (title: string) => {
         let newTodolistId = v1()
         let newTodolist: TodolistType = {id: newTodolistId, title, filter: 'all'}
         setTodolists([newTodolist, ...todolists])
@@ -115,7 +132,7 @@ function App() {
         })
     }
 
-    function changeTaskTitle(todolistId: string, id: string, newTitle: string) {
+    const changeTaskTitle = (todolistId: string, id: string, newTitle: string) => {
         let todolistTasks = tasks[todolistId]
         let task = todolistTasks.find(t => t.id === id)
         if (task) {
@@ -124,7 +141,7 @@ function App() {
         }
     }
 
-    function changeTodolistTitle(todolistId: string, newTitle: string) {
+    const changeTodolistTitle = (todolistId: string, newTitle: string) => {
         let todolist = todolists.find(t => t.id === todolistId)
         if (todolist) {
             todolist.title = newTitle
@@ -132,8 +149,14 @@ function App() {
         }
     }
 
+    const changeModeHandler = () => {
+        setThemeMode(themeMode == 'light' ? 'dark' : 'light')
+    }
+
+
     return (
-        <div>
+        <ThemeProvider theme={theme}>
+            <CssBaseline/>
             <AppBar position='static' sx={{mb: '30px'}}>
                 <Toolbar sx={{display: 'flex', justifyContent: 'space-between'}}>
                     <IconButton color='inherit'
@@ -152,7 +175,8 @@ function App() {
                             alert('LOGIN')
                         }}>Login</MenuButton>
                         <MenuButton>Logout</MenuButton>
-                        <MenuButton background={'#ab2a61'}>Faq</MenuButton>
+                        <MenuButton background={theme.palette.primary.dark}>Faq</MenuButton>
+                        <Switch color={'default'} onChange={changeModeHandler}/>
                     </div>
                 </Toolbar>
             </AppBar>
@@ -194,7 +218,7 @@ function App() {
                     })}
                 </Grid>
             </Container>
-        </div>
+        </ThemeProvider>
     );
 }
 

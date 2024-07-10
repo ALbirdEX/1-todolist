@@ -51,13 +51,14 @@ test('correct todolist should change it\'s name', () => {
         {id: todolistId2, title: 'What to buy', filter: 'all'}
     ]
 
-/*
-    const action = {                              //можно было action: ChangeTodolistTitleActionType
-        type: 'CHANGE-TODOLIST-TITLE' as const,
-        id: todolistId2,
-        title: newTodolistTitle
-    }
-*/
+    /*
+        const action = {                              //можно было action: ChangeTodolistTitleActionType
+            type: 'CHANGE-TODOLIST-TITLE' as const,
+            payload.{
+            id: todolistId2,
+            title: newTodolistTitle
+        }}as const
+    */
 
     const endState = todolistsReducer(startState, changeTodolistTitleAC(todolistId2, newTodolistTitle))
 
@@ -78,8 +79,10 @@ test('correct filter of todolist should be changed', () => {
 
     /*const action = {
         type: 'CHANGE-TODOLIST-FILTER' as const,
-        id: todolistId2,
-        filter: newFilter
+        payload: {
+      id: todolistId2,
+      title: 'New Todolist',
+    },
     }*/
 
     const endState = todolistsReducer(startState, changeTodolistFilterAC(todolistId2, newFilter))
