@@ -1,6 +1,6 @@
 import {TasksStateType} from "../App";
 import {v1} from "uuid";
-import {AddTodolistActionType, RemoveTodolistActionType} from "./todolists-reducer";
+import {AddTodolistActionType, RemoveTodolistActionType, todolistId1, todolistId2} from "./todolists-reducer";
 
 //ReturnType<Type> - извлекает тип возвращаемого значения функции Type
 //Оператор typeof возвращает строку, указывающую тип операнда
@@ -43,8 +43,21 @@ type ActionsType =
     | AddTodolistActionType
     | RemoveTodolistActionType
 
+const initialState: TasksStateType = {
+        [todolistId1]: [
+            {id: v1(), title: 'HTML & SCC', isDone: true},
+            {id: v1(), title: 'JS', isDone: true},
+            {id: v1(), title: 'ReactJS', isDone: false},
+            {id: v1(), title: 'rest API', isDone: false},
+            {id: v1(), title: 'graphQL', isDone: false},
+        ],
+        [todolistId2]: [
+            {id: v1(), title: 'RestAPI', isDone: false},
+            {id: v1(), title: 'RTK', isDone: false},
+        ]
+    }
 
-export const tasksReducer = (state: TasksStateType, action: ActionsType): TasksStateType => {
+export const tasksReducer = (state: TasksStateType = initialState, action: ActionsType): TasksStateType => {
     switch (action.type) {
         case 'REMOVE-TASK': {
             const copyState = {...state}
@@ -60,6 +73,7 @@ export const tasksReducer = (state: TasksStateType, action: ActionsType): TasksS
             return {...stateCopy}
         }
         case 'CHANGE-TASK-STATUS': {
+            //{...tasks, [todolistId]: tasks[todolistId].map(t => t.id === id ? {...t, isDone} : t)}
             const stateCopy = {...state}
             const todolistTasks = stateCopy[action.payload.todolistId]
             const task = todolistTasks.find(t => t.id === action.payload.taskId)
@@ -87,24 +101,25 @@ export const tasksReducer = (state: TasksStateType, action: ActionsType): TasksS
         }
 
         default:
-            throw new Error('I don\'t understand this type')
+            //throw new Error('I don\'t understand this type')
+            return state
     }
 }
 
 //as const уточняет тип этой переменной до ее точного значения или комбинации литеральных типов
 // Используется для создания неизменяемых значений и гарантирования того,
 // что TypeScript будет рассматривать значения как конкретные литералы, а не расширять типы.
-export const removeTaskAC = (taskId: string, todolistId: string) => ({
+export const removeTaskAC = (todolistId: string, taskId: string) => ({
     type: 'REMOVE-TASK', payload: {todolistId, taskId}
 }) as const
-export const addTaskAC = (title: string, todolistId: string) => ({
+export const addTaskAC = (todolistId: string, title: string) => ({
     type: 'ADD-TASK',
     payload: {
         todolistId,
         title
     }
 }) as const
-export const changeTaskStatusAC = (taskId: string, isDone: boolean, todolistId: string) => ({
+export const changeTaskStatusAC = (todolistId: string, taskId: string, isDone: boolean) => ({
     type: 'CHANGE-TASK-STATUS',
     payload: {
         todolistId,
@@ -112,7 +127,7 @@ export const changeTaskStatusAC = (taskId: string, isDone: boolean, todolistId: 
         isDone
     }
 }) as const
-export const changeTaskTitleAC = (taskId: string, newTitle: string, todolistId: string) => ({
+export const changeTaskTitleAC = (todolistId: string, taskId: string, newTitle: string) => ({
     type: 'CHANGE-TASK-TITLE',
     payload: {
         todolistId,
