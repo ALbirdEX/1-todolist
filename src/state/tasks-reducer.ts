@@ -1,4 +1,4 @@
-import {TasksStateType} from "../App";
+import {TasksStateType} from "../OldApp";
 import {v1} from "uuid";
 import {AddTodolistActionType, RemoveTodolistActionType, todolistId1, todolistId2} from "./todolists-reducer";
 
@@ -44,18 +44,18 @@ type ActionsType =
     | RemoveTodolistActionType
 
 const initialState: TasksStateType = {
-        [todolistId1]: [
-            {id: v1(), title: 'HTML & SCC', isDone: true},
-            {id: v1(), title: 'JS', isDone: true},
-            {id: v1(), title: 'ReactJS', isDone: false},
-            {id: v1(), title: 'rest API', isDone: false},
-            {id: v1(), title: 'graphQL', isDone: false},
-        ],
-        [todolistId2]: [
-            {id: v1(), title: 'RestAPI', isDone: false},
-            {id: v1(), title: 'RTK', isDone: false},
-        ]
-    }
+    [todolistId1]: [
+        {id: v1(), title: 'HTML & SCC', isDone: true},
+        {id: v1(), title: 'JS', isDone: true},
+        {id: v1(), title: 'ReactJS', isDone: false},
+        {id: v1(), title: 'rest API', isDone: false},
+        {id: v1(), title: 'graphQL', isDone: false},
+    ],
+    [todolistId2]: [
+        {id: v1(), title: 'RestAPI', isDone: false},
+        {id: v1(), title: 'RTK', isDone: false},
+    ]
+}
 
 export const tasksReducer = (state: TasksStateType = initialState, action: ActionsType): TasksStateType => {
     switch (action.type) {
@@ -87,7 +87,7 @@ export const tasksReducer = (state: TasksStateType = initialState, action: Actio
             const todolistTasks = stateCopy[action.payload.todolistId]
             const task = todolistTasks.find(t => t.id === action.payload.taskId)
             if (task) {
-                task.title = action.payload.title
+                task.title = action.payload.newTitle
             }
             return {...stateCopy}
         }
@@ -109,31 +109,20 @@ export const tasksReducer = (state: TasksStateType = initialState, action: Actio
 //as const уточняет тип этой переменной до ее точного значения или комбинации литеральных типов
 // Используется для создания неизменяемых значений и гарантирования того,
 // что TypeScript будет рассматривать значения как конкретные литералы, а не расширять типы.
-export const removeTaskAC = (todolistId: string, taskId: string) => ({
-    type: 'REMOVE-TASK', payload: {todolistId, taskId}
+export const removeTaskAC = (payload: { todolistId: string, taskId: string }) => ({
+    type: 'REMOVE-TASK', payload
 }) as const
-export const addTaskAC = (todolistId: string, title: string) => ({
+export const addTaskAC = (payload: { todolistId: string, title: string }) => ({
     type: 'ADD-TASK',
-    payload: {
-        todolistId,
-        title
-    }
+    payload
 }) as const
-export const changeTaskStatusAC = (todolistId: string, taskId: string, isDone: boolean) => ({
+export const changeTaskStatusAC = (payload: { todolistId: string, taskId: string, isDone: boolean }) => ({
     type: 'CHANGE-TASK-STATUS',
-    payload: {
-        todolistId,
-        taskId,
-        isDone
-    }
+    payload
 }) as const
-export const changeTaskTitleAC = (todolistId: string, taskId: string, newTitle: string) => ({
+export const changeTaskTitleAC = (payload: { todolistId: string, taskId: string, newTitle: string }) => ({
     type: 'CHANGE-TASK-TITLE',
-    payload: {
-        todolistId,
-        taskId,
-        title: newTitle
-    }
+    payload
 }) as const
 
 /*

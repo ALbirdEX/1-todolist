@@ -1,5 +1,5 @@
 import React, {ChangeEvent} from "react";
-import {FilterValuesType, TaskType} from "./App";
+import {FilterValuesType, TaskType} from "./OldApp";
 import {AddItemForm} from "./AddItemForm";
 import {EditableSpan} from "./EditableSpan";
 import IconButton from "@mui/material/IconButton"

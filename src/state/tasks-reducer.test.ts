@@ -5,7 +5,7 @@ import {
     removeTaskAC,
     tasksReducer
 } from './tasks-reducer'
-import {TasksStateType} from '../App'
+import {TasksStateType} from '../OldApp'
 import {addTodolistAC, removeTodolistAC} from "./todolists-reducer";
 
 let startState: TasksStateType
@@ -28,9 +28,16 @@ beforeEach(() => {
 
 test('correct task should be deleted from correct array', () => {
 
-    const action = removeTaskAC('2', 'todolistId2')
+    //const action = removeTaskAC('2', 'todolistId2')
 
-    const endState = tasksReducer(startState, action)
+    //const endState = tasksReducer(startState, action)
+    const endState = tasksReducer(
+        startState,
+        removeTaskAC({
+            todolistId: 'todolistId2',
+            taskId: '2'
+        })
+    )
 
     expect(endState).toEqual({
         'todolistId1': [
@@ -46,9 +53,14 @@ test('correct task should be deleted from correct array', () => {
 })
 test('correct task should be added to correct array', () => {
 
-    const action = addTaskAC('juce', 'todolistId2')
 
-    const endState = tasksReducer(startState, action)
+    const endState = tasksReducer(
+        startState,
+        addTaskAC({
+            todolistId: 'todolistId2',
+            title: 'juce'
+        })
+    )
 
     expect(endState['todolistId1'].length).toBe(3)
     expect(endState['todolistId2'].length).toBe(4)
@@ -59,9 +71,14 @@ test('correct task should be added to correct array', () => {
 
 test('status of specified task should be changed', () => {
 
-    const action = changeTaskStatusAC('todolistId2', '2', false)
-
-    const endState = tasksReducer(startState, action)
+    const endState = tasksReducer(
+        startState,
+        changeTaskStatusAC({
+            todolistId: 'todolistId2',
+            taskId: '2',
+            isDone: false
+        })
+    )
 
     expect(endState['todolistId2']['1'].isDone).toBe(false)
     expect(endState['todolistId1']['1'].isDone).toBe(true)
@@ -69,9 +86,14 @@ test('status of specified task should be changed', () => {
 
 test('title of specified task should be changed', () => {
 
-    const action = changeTaskTitleAC('3', 'TS', 'todolistId1')
-
-    const endState = tasksReducer(startState, action)
+    const endState = tasksReducer(
+        startState,
+        changeTaskTitleAC({
+            todolistId: 'todolistId1',
+            taskId: '3',
+            newTitle: 'TS'
+        })
+    )
 
     expect(endState['todolistId1']['2'].title).toBe('TS')
     expect(endState['todolistId1'].length).toBe(3)

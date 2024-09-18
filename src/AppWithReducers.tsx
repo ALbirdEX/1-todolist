@@ -1,5 +1,5 @@
 import React, {useReducer, useState} from 'react';
-import './App.css';
+import './app/App.css';
 import {Todolist} from "./Todolist";
 import {v1} from "uuid";
 import {AddItemForm} from "./AddItemForm";
@@ -86,8 +86,8 @@ function AppWithReducers() {
     //     setTasks({...tasks, [todolistId]: tasks[todolistId].filter(task => task.id !== id)})
     // }
 
-    function removeTask(todolistId: string, id: string) {
-        let sction = removeTaskAC(todolistId, id)
+    function removeTask(todolistId: string, taskId: string) {
+        let sction = removeTaskAC({todolistId, taskId})
         dispatchTasks(sction)
     }
 
@@ -103,7 +103,7 @@ function AppWithReducers() {
     // }
 
     function addTask(todolistId: string, title: string) {
-        let action = addTaskAC(todolistId, title)
+        let action = addTaskAC({todolistId, title})
         dispatchTasks(action)
     }
 
@@ -120,8 +120,8 @@ function AppWithReducers() {
     //     setTasks({...tasks, [todolistId]: tasks[todolistId].map(t => t.id === id ? {...t, isDone} : t)})
     // }
 
-    function changeTaskStatus(todolistId: string, id: string, isDone: boolean) {
-        let action = changeTaskStatusAC(todolistId, id, isDone)
+    function changeTaskStatus(todolistId: string, taskId: string, isDone: boolean) {
+        let action = changeTaskStatusAC({todolistId, taskId, isDone})
         dispatchTasks(action)
     }
 
@@ -137,8 +137,8 @@ function AppWithReducers() {
     //     setTodolists(todolists.map(td => td.id === todolistId ? {...td, filter: value} : td))
     // }
 
-    function changeFilter(todolistId: string, value: FilterValuesType) {
-        let action = changeTodolistFilterAC(todolistId, value)
+    function changeFilter(id: string, filter: FilterValuesType) {
+        let action = changeTodolistFilterAC({id, filter})
         dispatchTodolists(action)
     }
 
@@ -177,8 +177,8 @@ function AppWithReducers() {
     //     }
     // }
 
-    function changeTaskTitle(todolistId: string, id: string, newTitle: string) {
-        let action = changeTaskTitleAC(todolistId, id, newTitle)
+    function changeTaskTitle(todolistId: string, taskId: string, newTitle: string) {
+        let action = changeTaskTitleAC({todolistId, taskId, newTitle})
         dispatchTasks(action)
     }
 
@@ -190,8 +190,8 @@ function AppWithReducers() {
     //     }
     // }
 
-    function changeTodolistTitle(todolistId: string, newTitle: string) {
-        let action = changeTodolistTitleAC(todolistId, newTitle)
+    function changeTodolistTitle(id: string, title: string) {
+        let action = changeTodolistTitleAC({id, title})
         dispatchTodolists(action)
     }
 

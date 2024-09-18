@@ -1,4 +1,4 @@
-import {FilterValuesType, TodolistType} from "../App";
+import {FilterValuesType, TodolistType} from "../OldApp";
 import {v1} from "uuid";
 
 export type RemoveTodolistActionType = {
@@ -42,9 +42,9 @@ export let todolistId2 = v1()
 const initialState: TodolistType[] = [
     {id: todolistId1, title: 'What to learn', filter: 'all'},
     {id: todolistId2, title: 'What to buy', filter: 'completed'},
-    ]
+]
 
-export const todolistsReducer = (state: TodolistType[] = initialState , action: ActionsType): TodolistType[] => {
+export const todolistsReducer = (state: TodolistType[] = initialState, action: ActionsType): TodolistType[] => {
 
     switch (action.type) {
         case 'REMOVE-TODOLIST':
@@ -65,15 +65,20 @@ export const todolistsReducer = (state: TodolistType[] = initialState , action: 
             return state
     }
 }
+
+// Если один параметр, то оставляем как есть, если 2 и более то упаковываем их в объект
 export const removeTodolistAC = (todolistId: string): RemoveTodolistActionType => {
     return {type: 'REMOVE-TODOLIST', payload: {id: todolistId}}
 }
 export const addTodolistAC = (title: string): AddTodolistActionType => {
     return {type: 'ADD-TODOLIST', payload: {title: title, todolistId: v1()}}
 }
-export const changeTodolistTitleAC = (id: string, title: string): ChangeTodolistTitleActionType => {
-    return {type: 'CHANGE-TODOLIST-TITLE', payload: {id: id, title: title}}
+export const changeTodolistTitleAC = (payload: { id: string, title: string }): ChangeTodolistTitleActionType => {
+    return {type: 'CHANGE-TODOLIST-TITLE', payload}
 }
-export const changeTodolistFilterAC = (id: string, filter: FilterValuesType): ChangeTodolistFilterActionType => {
-    return {type: 'CHANGE-TODOLIST-FILTER', payload: {id, filter}}
+export const changeTodolistFilterAC = (payload: {
+    id: string,
+    filter: FilterValuesType
+}): ChangeTodolistFilterActionType => {
+    return {type: 'CHANGE-TODOLIST-FILTER', payload}
 }
