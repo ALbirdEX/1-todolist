@@ -246,6 +246,7 @@ function AppWithReducers() {
                         return <Grid>
                             <Paper sx={{padding: '0 20px 20px 20px'}}
                                    elevation={24}>
+
                                 <Todolist key={todolist.id}
                                           title={todolist.title}
                                           id={todolist.id}

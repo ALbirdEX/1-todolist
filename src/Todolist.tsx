@@ -1,4 +1,4 @@
-import React, {ChangeEvent} from "react";
+import React, {ChangeEvent, memo, useCallback} from "react";
 import {FilterValuesType, TaskType} from "./OldApp";
 import {AddItemForm} from "./AddItemForm";
 import {EditableSpan} from "./EditableSpan";
@@ -29,15 +29,16 @@ type PropsType = {
     changeTodolistTitle: (todolistId: string, newTitle: string) => void
 }
 
-export const Todolist = (props: PropsType) => {
+export const Todolist = memo((props: PropsType) => {
+
     // сокращаем код используя деструктурирующее присваивание, избавляемся от props.
     const {title, id, tasks, filter} = props
-
+    console.log(`Todolist in called ${id}` )
     const [animationRef] = useAutoAnimate<HTMLDListElement>()
 
-    const addTask = (title: string) => {
+    const addTask = useCallback((title: string) => {
         props.addTask(id, title)
-    }
+    }, [])
     /*   const onAllClickHandler = () => {
            props.changeFilter(props.id, 'all')
        }
@@ -57,6 +58,17 @@ export const Todolist = (props: PropsType) => {
         props.changeTodolistTitle(id, newTitle)
     }
 
+    let tasksForTodolist = tasks
+
+    switch (filter) {
+        case 'active':
+            tasksForTodolist = tasks.filter(task => !task.isDone)
+            break
+        case 'completed':
+            tasksForTodolist = tasks.filter(task => task.isDone)
+            break
+    }
+
     return (
         <div>
             <h3>
@@ -68,10 +80,10 @@ export const Todolist = (props: PropsType) => {
                 </IconButton>
             </h3>
             <AddItemForm addItem={addTask}/>
-            {tasks.length === 0
+            {/*{tasksForTodolist.length === 0
                 ? <p><h3>No tasks</h3></p>
-                : <List ref={animationRef}>
-                    {tasks.map((task) => {
+                :*/} <List ref={animationRef}>
+                    {tasksForTodolist.map((task) => {
                         const onClickHandler = () => {
                             props.removeTask(id, task.id)
                         }
@@ -100,7 +112,7 @@ export const Todolist = (props: PropsType) => {
                         )
                     })}
                 </List>
-            }
+            {/*}*/}
 
             <Box sx={filterButtonsContainerSx}>{
                 <ButtonGroup variant="contained" aria-label="Basic button group">
@@ -117,6 +129,4 @@ export const Todolist = (props: PropsType) => {
             }</Box>
         </div>
     );
-}
-
-
+})

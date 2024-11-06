@@ -1,4 +1,4 @@
-import React, {ChangeEvent, KeyboardEvent, useState} from "react";
+import React, {ChangeEvent, KeyboardEvent, memo, useState} from "react";
 import TextField from '@mui/material/TextField';
 import IconButton from "@mui/material/IconButton";
 import AddBoxIcon from "@mui/icons-material/AddBox";
@@ -8,7 +8,8 @@ export type AddItemFormPropsType = {
     addItem: (title: string) => void
 }
 
-export function AddItemForm({addItem}: AddItemFormPropsType) {
+export const AddItemForm = memo(function ({addItem}: AddItemFormPropsType) {
+    console.log("AddItemForm in called")
 
     const [title, setTitle] = useState('')
     const [error, setError] = useState<string | null>(null)
@@ -25,14 +26,14 @@ export function AddItemForm({addItem}: AddItemFormPropsType) {
         setTitle(event.currentTarget.value)
     }
     const onKeyDownHandler = (event: KeyboardEvent<HTMLInputElement>) => {
-        //setError(null) //убиваем ошибку при начале ввода
+        setError(null) //убиваем ошибку при начале ввода
         if (event.key === 'Enter' && event.altKey) {
             addItemHandler()
         }
     }
     //убиывем ошибку
-    const onBlurHandler = () => {
-        if (error) {
+    const offErrorHandler = () => {
+        if (error !== null) {
             setError(null)
         }
     }
@@ -43,6 +44,10 @@ export function AddItemForm({addItem}: AddItemFormPropsType) {
                        value={title}
                        onChange={onChangeHandler}
                        onKeyDown={onKeyDownHandler}
+                //onBlur ={onBlurHandler}
+                //onFocus={onFocusHandler}
+                       onBlur={offErrorHandler}
+                       onFocus={offErrorHandler}
                        error={!!error}
                        label='Write the titl'
                        helperText={error}
@@ -51,9 +56,11 @@ export function AddItemForm({addItem}: AddItemFormPropsType) {
             <IconButton
                 color='primary'
                 onClick={addItemHandler}
-                onBlur={onBlurHandler}>
+                onBlur={offErrorHandler}
+                //onBlur={onBlurHandler}
+            >
                 <AddBoxIcon/>
             </IconButton>
         </div>
     )
-}
+})
