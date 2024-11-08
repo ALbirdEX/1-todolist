@@ -9,7 +9,6 @@ export type AddItemFormPropsType = {
 }
 
 export const AddItemForm = memo(function ({addItem}: AddItemFormPropsType) {
-    console.log("AddItemForm in called")
 
     const [title, setTitle] = useState('')
     const [error, setError] = useState<string | null>(null)

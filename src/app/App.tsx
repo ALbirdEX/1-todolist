@@ -104,7 +104,6 @@ function App() {
         setThemeMode(themeMode == 'light' ? 'dark' : 'light')
     }
 
-
     return (
         <ThemeProvider theme={theme}>
             <CssBaseline/>
