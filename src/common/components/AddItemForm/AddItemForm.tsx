@@ -4,11 +4,11 @@ import IconButton from "@mui/material/IconButton";
 import AddBoxIcon from "@mui/icons-material/AddBox";
 
 
-export type AddItemFormPropsType = {
+export type Props = {
     addItem: (title: string) => void
 }
 
-export const AddItemForm = memo(function ({addItem}: AddItemFormPropsType) {
+export const AddItemForm = memo(function ({addItem}: Props) {
 
     const [title, setTitle] = useState('')
     const [error, setError] = useState<string | null>(null)
@@ -43,8 +43,6 @@ export const AddItemForm = memo(function ({addItem}: AddItemFormPropsType) {
                        value={title}
                        onChange={onChangeHandler}
                        onKeyDown={onKeyDownHandler}
-                //onBlur ={onBlurHandler}
-                //onFocus={onFocusHandler}
                        onBlur={offErrorHandler}
                        onFocus={offErrorHandler}
                        error={!!error}
@@ -56,7 +54,6 @@ export const AddItemForm = memo(function ({addItem}: AddItemFormPropsType) {
                 color='primary'
                 onClick={addItemHandler}
                 onBlur={offErrorHandler}
-                //onBlur={onBlurHandler}
             >
                 <AddBoxIcon/>
             </IconButton>

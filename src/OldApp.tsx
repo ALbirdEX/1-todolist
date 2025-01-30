@@ -1,8 +1,8 @@
 import React, {useState} from 'react';
 import './app/App.css';
-import {Todolist} from "./Todolist";
+import {Todolist} from "./features/todolists/ui/Todolists/Todolist/Todolist";
 import {v1} from "uuid";
-import {AddItemForm} from "./AddItemForm";
+import {AddItemForm} from "./common/components/AddItemForm/AddItemForm";
 import AppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
 import MenuIcon from "@mui/icons-material/Menu";
@@ -11,7 +11,7 @@ import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import Grid from "@mui/material/Unstable_Grid2";
 import Paper from "@mui/material/Paper";
-import {MenuButton} from "./MenuButton";
+import {MenuButton} from "./common/components/MenuButton/MenuButton";
 import {createTheme, ThemeProvider} from '@mui/material/styles'
 import {CssBaseline, Switch} from "@mui/material";
 
@@ -201,17 +201,18 @@ function OldApp() {
                             <Paper sx={{padding: '0 20px 20px 20px'}}
                                    elevation={24}>
                                 <Todolist key={todolist.id}
-                                          title={todolist.title}
-                                          id={todolist.id}
-                                          tasks={tasksForTodolist}
-                                          removeTask={removeTask}
-                                          changeFilter={changeFilter}
-                                          addTask={addTask}
-                                          changeTaskStatus={changeTaskStatus}
-                                          filter={todolist.filter}
-                                          removeTodolist={removeTodolist}
-                                          changeTaskTitle={changeTaskTitle}
-                                          changeTodolistTitle={changeTodolistTitle}
+                                    //title={todolist.title}
+                                    //id={todolist.id}
+                                    //filter={todolist.filter}
+                                          todolist={todolist}
+                                          //tasks={tasksForTodolist}
+                                          //removeTask={removeTask}
+                                          //changeFilter={changeFilter}
+                                          //addTask={addTask}
+                                          //changeTaskStatus={changeTaskStatus}
+                                          //removeTodolist={removeTodolist}
+                                          //changeTaskTitle={changeTaskTitle}
+                                          //changeTodolistTitle={changeTodolistTitle}
                                 />
                             </Paper>
                         </Grid>

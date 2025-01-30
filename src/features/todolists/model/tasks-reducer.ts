@@ -1,6 +1,6 @@
-import {TasksStateType} from "../OldApp";
 import {v1} from "uuid";
 import {AddTodolistActionType, RemoveTodolistActionType, todolistId1, todolistId2} from "./todolists-reducer";
+import {TasksStateType} from "../../../app/App";
 
 //ReturnType<Type> - извлекает тип возвращаемого значения функции Type
 //Оператор typeof возвращает строку, указывающую тип операнда
@@ -119,7 +119,8 @@ export const tasksReducer = (state: TasksStateType = initialState, action: Actio
 // Используется для создания неизменяемых значений и гарантирования того,
 // что TypeScript будет рассматривать значения как конкретные литералы, а не расширять типы.
 export const removeTaskAC = (payload: { todolistId: string, taskId: string }) => ({
-    type: 'REMOVE-TASK', payload
+    type: 'REMOVE-TASK',
+    payload
 }) as const
 export const addTaskAC = (payload: { todolistId: string, title: string }) => ({
     type: 'ADD-TASK',
